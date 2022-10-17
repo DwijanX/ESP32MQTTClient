@@ -7,7 +7,7 @@ const char* pass = "testwemos";
 const char* MQTT_BROKER = "broker.hivemq.com";
 const int MQTT_PORT = 1883;
 
-const char* MQTT_CLIENT_ID = "grupo2_tempsens";
+const char* MQTT_CLIENT_ID = "grupo2_Leds";
 
 const char* SUBSCRIBE_TOPIC_REDLED = "iot/grupo2/redLed";    // publish topic
 const char* SUBSCRIBE_TOPIC_BLUELED = "iot/grupo2/blueLed";    // publish topic

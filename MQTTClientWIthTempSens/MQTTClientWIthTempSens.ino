@@ -32,12 +32,25 @@ void handlePostsBasedOn(float temperature)
   String tempString = String(temperature);
   mqttClient.publish(PUBLISH_TOPIC_TEMP, tempString.c_str());
   String ledOnString=String("LED_ON");
+  String ledOffString=String("LED_OFF");
   if(temperature>MIDDLETEMPERATURETOPLIMIT)
+  {
     mqttClient.publish(PUBLISH_TOPIC_REDLED, ledOnString.c_str());
+    mqttClient.publish(PUBLISH_TOPIC_YELLOWLED, ledOffString.c_str());
+    mqttClient.publish(PUBLISH_TOPIC_BLUELED, ledOffString.c_str());
+  }
   else if(temperature<=MIDDLETEMPERATURETOPLIMIT && temperature>=MIDDLETEMPERATURELOWLIMIT)
+  {
     mqttClient.publish(PUBLISH_TOPIC_YELLOWLED, ledOnString.c_str());
+    mqttClient.publish(PUBLISH_TOPIC_REDLED, ledOffString.c_str());
+    mqttClient.publish(PUBLISH_TOPIC_BLUELED, ledOffString.c_str());
+  }
   else if(temperature<MIDDLETEMPERATURELOWLIMIT)
+  {
     mqttClient.publish(PUBLISH_TOPIC_BLUELED, ledOnString.c_str());
+    mqttClient.publish(PUBLISH_TOPIC_REDLED, ledOffString.c_str());
+    mqttClient.publish(PUBLISH_TOPIC_YELLOWLED, ledOffString.c_str());
+  }
 }
 
 // PubSubClient callback function
