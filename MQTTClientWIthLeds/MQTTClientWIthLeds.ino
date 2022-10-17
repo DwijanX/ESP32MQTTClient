@@ -17,7 +17,6 @@ const int REDPIN=26;
 const int BLUEPIN=17;
 const int YELLOWPIN=25;
 
-int currentLedOnPin;
 
 WiFiClient wifiClient;
 PubSubClient mqttClient(wifiClient);
@@ -31,8 +30,10 @@ void manageLedMessages(String instruction,int ledPin)
     if (instruction == "LED_ON") 
     {
       turnLed(1, ledPin);
-      turnLed(0, currentLedOnPin);
-      currentLedOnPin=ledPin;
+    }
+    else if (instruction == "LED_OFF") 
+    {
+      turnLed(0, ledPin);
     }
 }
 
