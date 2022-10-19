@@ -4,7 +4,7 @@
 #define DHTTYPE DHT11
 #define TEMPERATUREPIN 5
 #define MIDDLETEMPERATURELOWLIMIT 15 
-#define MIDDLETEMPERATURETOPLIMIT 25 
+#define MIDDLETEMPERATURETOPLIMIT 20 
 const char* WIFI_SSID = "POCO X4 Pro 5G";
 const char* WIFI_PASS = "testwemos";
 
@@ -19,7 +19,9 @@ const char* PUBLISH_TOPIC_REDLED = "iot/grupo2/redLed";    // publish topic
 const char* PUBLISH_TOPIC_BLUELED = "iot/grupo2/blueLed";    // publish topic
 const char* PUBLISH_TOPIC_YELLOWLED = "iot/grupo2/yellowLed";    // publish topic
 
-
+const int QoSLeds=1;
+const int QoSTempIN=0;
+const int QoSTempOUT=2;
 
 DHT dht(TEMPERATUREPIN, DHTTYPE);
 
@@ -30,26 +32,26 @@ PubSubClient mqttClient(wifiClient);
 void handlePostsBasedOn(float temperature)
 {
   String tempString = String(temperature);
-  mqttClient.publish(PUBLISH_TOPIC_TEMP, tempString.c_str());
+  mqttClient.publish(PUBLISH_TOPIC_TEMP, tempString.c_str(),QoSTempOUT);
   String ledOnString=String("LED_ON");
   String ledOffString=String("LED_OFF");
   if(temperature>MIDDLETEMPERATURETOPLIMIT)
   {
-    mqttClient.publish(PUBLISH_TOPIC_REDLED, ledOnString.c_str());
-    mqttClient.publish(PUBLISH_TOPIC_YELLOWLED, ledOffString.c_str());
-    mqttClient.publish(PUBLISH_TOPIC_BLUELED, ledOffString.c_str());
+    mqttClient.publish(PUBLISH_TOPIC_REDLED, ledOnString.c_str(),QoSLeds);
+    mqttClient.publish(PUBLISH_TOPIC_YELLOWLED, ledOffString.c_str(),QoSLeds);
+    mqttClient.publish(PUBLISH_TOPIC_BLUELED, ledOffString.c_str(),QoSLeds);
   }
   else if(temperature<=MIDDLETEMPERATURETOPLIMIT && temperature>=MIDDLETEMPERATURELOWLIMIT)
   {
-    mqttClient.publish(PUBLISH_TOPIC_YELLOWLED, ledOnString.c_str());
-    mqttClient.publish(PUBLISH_TOPIC_REDLED, ledOffString.c_str());
-    mqttClient.publish(PUBLISH_TOPIC_BLUELED, ledOffString.c_str());
+    mqttClient.publish(PUBLISH_TOPIC_YELLOWLED, ledOnString.c_str(),QoSLeds);
+    mqttClient.publish(PUBLISH_TOPIC_REDLED, ledOffString.c_str(),QoSLeds);
+    mqttClient.publish(PUBLISH_TOPIC_BLUELED, ledOffString.c_str(),QoSLeds);
   }
   else if(temperature<MIDDLETEMPERATURELOWLIMIT)
   {
-    mqttClient.publish(PUBLISH_TOPIC_BLUELED, ledOnString.c_str());
-    mqttClient.publish(PUBLISH_TOPIC_REDLED, ledOffString.c_str());
-    mqttClient.publish(PUBLISH_TOPIC_YELLOWLED, ledOffString.c_str());
+    mqttClient.publish(PUBLISH_TOPIC_BLUELED, ledOnString.c_str(),QoSLeds);
+    mqttClient.publish(PUBLISH_TOPIC_REDLED, ledOffString.c_str(),QoSLeds);
+    mqttClient.publish(PUBLISH_TOPIC_YELLOWLED, ledOffString.c_str(),QoSLeds);
   }
 }
 
@@ -80,7 +82,7 @@ boolean mqttClientConnect() {
   {
     Serial.println("Connected to " + String(MQTT_BROKER));
 
-    mqttClient.subscribe(SUBSCRIBE_TOPIC_TEMP);
+    mqttClient.subscribe(SUBSCRIBE_TOPIC_TEMP,QoSTempIN);
     Serial.println("Subscribed to " + String(SUBSCRIBE_TOPIC_TEMP));
   } 
   else 

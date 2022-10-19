@@ -17,6 +17,7 @@ const int REDPIN=26;
 const int BLUEPIN=17;
 const int YELLOWPIN=25;
 
+const int QoSLeds=1;
 
 WiFiClient wifiClient;
 PubSubClient mqttClient(wifiClient);
@@ -59,11 +60,11 @@ boolean mqttClientConnect() {
   {
     Serial.println("Connected to " + String(MQTT_BROKER));
 
-    mqttClient.subscribe(SUBSCRIBE_TOPIC_REDLED);
+    mqttClient.subscribe(SUBSCRIBE_TOPIC_REDLED,QoSLeds);
     Serial.println("Subscribed to " + String(SUBSCRIBE_TOPIC_REDLED));
-    mqttClient.subscribe(SUBSCRIBE_TOPIC_BLUELED);
+    mqttClient.subscribe(SUBSCRIBE_TOPIC_BLUELED,QoSLeds);
     Serial.println("Subscribed to " + String(SUBSCRIBE_TOPIC_BLUELED));
-    mqttClient.subscribe(SUBSCRIBE_TOPIC_YELLOWLED);
+    mqttClient.subscribe(SUBSCRIBE_TOPIC_YELLOWLED,QoSLeds);
     Serial.println("Subscribed to " + String(SUBSCRIBE_TOPIC_YELLOWLED));
   } 
   else 
